@@ -90,3 +90,27 @@ with onglets[2]:
         f"Quartiers résidentiels, 2024 et 2025 : la corrélation de la consommation par abonné "
         f"est de {r_courant:.2f} avec les heures de courant, et de {r_chaleur:.2f} avec la température."
     )
+
+with onglets[3]:
+    st.subheader(f"Où les coupures sont-elles les plus longues en {annee} ?")
+    heures = choix.groupby("commune")["heures_courant"].median().round(1).sort_values()
+    st.bar_chart(heures, y_label="Médiane des heures de courant par jour")
+    courts = choix[choix["heures_courant"] < 8]
+    st.write(
+        f"Commune avec le moins de courant : {heures.index[0]} "
+        f"(médiane de {heures.iloc[0]} heures par jour). "
+        f"Relevés de {annee} sous 8 heures de courant : {len(courts)}."
+    )
+    if len(courts):
+        st.dataframe(courts[["mois", "quartier", "heures_courant"]], hide_index=True)
+
+with onglets[4]:
+    st.subheader("Quels relevés sortent du lot ?")
+    top3 = choix.nlargest(3, "kwh")[["mois", "quartier", "type", "kwh"]]
+    st.bar_chart(top3.assign(releve=top3["quartier"] + " " + top3["mois"]),
+                 x="releve", y="kwh", y_label="kWh")
+    st.write(
+        f"La plus grosse consommation de {annee} : {top3.iloc[0]['quartier']} en "
+        f"{top3.iloc[0]['mois']} ({top3.iloc[0]['kwh']:,} kWh).".replace(",", " ")
+    )
+    st.dataframe(top3, hide_index=True)
