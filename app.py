@@ -37,3 +37,9 @@ if not communes:
 
 periode = donnees[donnees["commune"].isin(communes)]
 choix = periode[periode["annee"] == annee]
+
+#Indicateurs
+col1, col2, col3 = st.columns(3)
+col1.metric(f"Consommation {annee}", f"{choix['kwh'].sum() / 1_000_000:.2f} millions de kWh")
+col2.metric("Par abonné et par mois", f"{choix['kwh_par_abonne'].mean():.1f} kWh")
+col3.metric("Courant par jour", f"{choix['heures_courant'].mean():.1f} heures")
