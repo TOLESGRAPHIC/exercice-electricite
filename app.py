@@ -114,3 +114,17 @@ with onglets[4]:
         f"{top3.iloc[0]['mois']} ({top3.iloc[0]['kwh']:,} kWh).".replace(",", " ")
     )
     st.dataframe(top3, hide_index=True)
+
+st.header("Conclusion")
+st.markdown(
+    "La consommation suit surtout **les heures de courant** et non la chaleur : dans les "
+    "quartiers résidentiels, la corrélation avec les heures de courant est de 0.76, contre "
+    "-0.15 avec la température. À Cap-Haïtien, les coupures sont les plus longues (médiane de "
+    "10.0 heures contre 11.6 à 11.9 ailleurs) et la consommation par abonné est la plus basse, "
+    "alors que la commune a la plus forte hausse en 2025 (+22.4 %). Une corrélation montre que "
+    "deux séries varient ensemble, pas que l'une cause l'autre : deux ans de relevés ne "
+    "suffisent pas à prouver que le courant est la cause."
+)
+
+with st.expander("Voir les données filtrées"):
+    st.dataframe(choix, hide_index=True)
